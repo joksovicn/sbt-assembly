@@ -73,7 +73,7 @@ object Plugin extends sbt.Plugin {
       log.info("Including %s".format(jarName))
       IO.unzip(jar, tempDir)
       IO.delete(ao.exclude(Seq(tempDir)))
-      val servicesDir = tempDir / "META-INF" / "services"
+      val servicesDir = tempDir / "META-INF"
       if (servicesDir.asFile.exists) {
        for (service <- (servicesDir ** "*").get) {
          val serviceFile = service.asFile
@@ -91,7 +91,7 @@ object Plugin extends sbt.Plugin {
 
     for ((service, providers) <- services) {
       log.info("Merging providers for %s".format(service))
-      val serviceFile = (tempDir / "META-INF" / "services" / service).asFile
+      val serviceFile = (tempDir / "META-INF" / service).asFile
       val writer = new PrintWriter(serviceFile)
       for (provider <- providers.map { _.trim }.filter { !_.isEmpty }) {
         log.debug("-  %s".format(provider))
